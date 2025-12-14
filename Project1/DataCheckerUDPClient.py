@@ -4,18 +4,18 @@ import socket
 
 def main():
     serverIP = "150.136.144.166"
-    serverPort = 10011
+    serverPort = 24454
 
-    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    soc = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     try:
         soc.connect((serverIP, serverPort))
         message = input("Enter a number to send: ")
-        soc.sendall(message.encode())
-
-        data = soc.recv(1024)
+        soc.sendto(message.encode(), (serverIP, serverPort))
+        
+        data, addr = soc.recvfrom(1024)
         print(f"The number is {data.decode()}")
-
+    
     except socket.error as e:
         print(f"Socket error occurred: {e}")
     except KeyboardInterrupt:
